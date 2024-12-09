@@ -172,17 +172,17 @@ def edit_pset(obj, prop, value=None, force=False):
             ptype = ptype.split(":", 1)[0]
     else:
         ptype = obj.getTypeIdOfProperty(prop)
-        if ifcprop == "App::PropertyDistance":
+        if ptype == "App::PropertyDistance":
             ptype = "IfcLengthMeasure"
-        elif ifcprop == "App::PropertyLength":
+        elif ptype == "App::PropertyLength":
             ptype = "IfcPositiveLengthMeasure"
-        elif ifcprop == "App::PropertyBool":
+        elif ptype == "App::PropertyBool":
             ptype = "IfcBoolean"
-        elif ifcprop == "App::PropertyInteger":
+        elif ptype == "App::PropertyInteger":
             ptype = "IfcInteger"
-        elif ifcprop == "App::PropertyFloat":
+        elif ptype == "App::PropertyFloat":
             ptype = "IfcReal"
-        elif ifcprop == "App::PropertyArea":
+        elif ptype == "App::PropertyArea":
             ptype = "IfcAreaMeasure"
         else:
             # default
@@ -300,7 +300,7 @@ def add_property(ifcfile, pset, name, value=""):
 
 
 def get_freecad_type(ptype):
-    """Returns a FreeCAD property type correspinding to an IFC property type"""
+    """Returns a FreeCAD property type corresponding to an IFC property type"""
 
     conv = read_properties_conversion()
     for key, values in conv.items():
@@ -310,7 +310,7 @@ def get_freecad_type(ptype):
 
 
 def get_ifc_type(fctype):
-    """Returns an IFC property type correspinding to a FreeCAD property type"""
+    """Returns an IFC property type corresponding to a FreeCAD property type"""
 
     conv = read_properties_conversion()
     for key, values in conv.items():
