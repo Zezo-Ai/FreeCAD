@@ -114,7 +114,10 @@ def makeBuildingPart(objectslist=None,baseobj=None,name=None):
     if FreeCAD.GuiUp:
         ArchBuildingPart.ViewProviderBuildingPart(obj.ViewObject)
     if objectslist:
-        obj.addObjects(objectslist)
+        if isinstance(objectslist,(list,tuple)):
+            obj.addObjects(objectslist)
+        else:
+            obj.addObject(objectslist)
     return obj
 
 
@@ -144,6 +147,25 @@ def makeBuilding(objectslist=None,baseobj=None,name=None):
     if FreeCAD.GuiUp:
         obj.ViewObject.ShowLevel = False
         obj.ViewObject.ShowLabel = False
+    return obj
+
+
+def make2DDrawing(objectslist=None,baseobj=None,name=None):
+
+    """makes a BuildingPart and turns it into a 2D drawing view"""
+
+    obj = makeBuildingPart(objectslist)
+    obj.Label = name if name else translate("Arch","Drawing")
+    obj.IfcType = "Annotation"
+    obj.ObjectType = "DRAWING"
+    obj.setEditorMode("Area",2)
+    obj.setEditorMode("Height",2)
+    obj.setEditorMode("LevelOffset",2)
+    obj.setEditorMode("OnlySolids",2)
+    obj.setEditorMode("HeightPropagate",2)
+    if FreeCAD.GuiUp:
+        obj.ViewObject.DisplayOffset = FreeCAD.Placement()
+        obj.ViewObject.ShowLevel = False
     return obj
 
 
@@ -776,6 +798,7 @@ def makeStairs(baseobj=None,length=None,width=None,height=None,steps=None,name=N
     label = name if name else translate("Arch","Stairs")
 
     def setProperty(obj,length,width,height,steps):
+        """setProperty(obj,length,width,height,steps): sets up the basic properties for this stair"""
         if length:
             obj.Length = length
         else:
@@ -868,6 +891,7 @@ def makeRailing(stairs):
     import ArchPipe
 
     def makeRailingLorR(stairs,side="L"):
+        """makeRailingLorR(stairs,side="L"): Creates a railing on the given side of the stairs, L or R"""
         for stair in reversed(stairs):
             if side == "L":
                 outlineLR = stair.OutlineLeft
